@@ -42,19 +42,18 @@ router.post("/create", async (req, res) => {
 });
 
 // Update Todo
-router.patch("/update/:id", getTodos, async (req, res) => {
-  if (req.body.name != null) {
-    res.todo.name = req.body.name;
-  }
-  if (req.body.description != null) {
-    res.todo.description = req.body.description;
-  }
-  if (req.body.completed != null) {
-    res.todo.completed = req.body.completed;
-  }
+router.patch("/update", async (req, res) => {
+  let { name, description, _id, completed } = req.body;
   try {
-    const updatedTodo = await res.todo.save();
-    res.json(updatedTodo);
+    let todo = await Todo.findOneAndUpdate(
+      { _id },
+      { name, description, completed },
+      { new: true }
+    );
+    if (todo == null) {
+      return res.status(404).json({ message: "Cannot Find TodoList" });
+    }
+    res.json(todo);
   } catch (e) {
     res.status(400).json({ message: e.message });
   }
