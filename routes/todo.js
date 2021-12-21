@@ -31,7 +31,7 @@ router.post("/create", async (req, res) => {
   const todo = new Todo({
     name: req.body.name,
     description: req.body.description,
-    // completed: req.body.completed,
+    completed: false,
   });
   try {
     const newTodo = await todo.save();
